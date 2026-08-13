@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vignan Student Complaint Portal - VIIT Grievance Redressal</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-cream">
+
+  <!-- ========================================================= -->
+  <!-- 1. LOGIN PAGE VIEW (Split Screen layout matching prompt photos) -->
+  <!-- ========================================================= -->
+  <div id="login-screen" class="screen active">
+    <div class="login-container">
+      
+      <!-- LEFT SIDE: Login Credentials & Form -->
+      <div class="login-left">
+        <div class="login-brand">
+          <div class="brand-icon">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">VIGNAN STUDENT COMPLAINT PORTAL</span>
+            <span class="badge-private"><i class="fa-solid fa-shield-halved"></i> VIIT Student Cell</span>
+          </div>
+        </div>
+
+        <div class="login-header">
+          <h2>Welcome to Vignan Student Complaint Portal</h2>
+          <p>Please select your login role and enter your credentials to access the portal.</p>
+        </div>
+
+        <!-- Role Selector: Student vs Admin vs Working Staff -->
+        <div class="role-selector role-selector-3">
+          <button type="button" class="role-btn active" id="role-student-btn" onclick="setRole('student')">
+            <i class="fa-solid fa-user-graduate"></i> Student
+          </button>
+          <button type="button" class="role-btn" id="role-admin-btn" onclick="setRole('admin')">
+            <i class="fa-solid fa-user-gear"></i> Admin
+          </button>
+          <button type="button" class="role-btn" id="role-staff-btn" onclick="setRole('staff')">
+            <i class="fa-solid fa-screwdriver-wrench"></i> Working Staff
+          </button>
+        </div>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+          
+          <!-- Student Roll Number Input -->
+          <div class="form-group" id="group-rollno">
+            <label for="input-rollno"><i class="fa-solid fa-id-card"></i> Student Roll Number</label>
+            <input type="text" id="input-rollno" placeholder="e.g. 211FA04001" value="211FA04001">
+            <span class="input-hint">Use your Vignan assigned Roll Number (e.g. 211FA04001)</span>
+          </div>
+
+          <!-- Admin ID Input -->
+          <div class="form-group hidden" id="group-adminid">
+            <label for="input-adminid"><i class="fa-solid fa-user-shield"></i> Admin Access ID</label>
+            <input type="text" id="input-adminid" placeholder="e.g. ADMIN01 or HOD_IT">
+          </div>
+
+          <!-- Working Staff ID Input -->
+          <div class="form-group hidden" id="group-staffid">
+            <label for="input-staffid"><i class="fa-solid fa-id-badge"></i> Working Staff ID</label>
+            <input type="text" id="input-staffid" placeholder="e.g. STAFF_IT or STAFF_ELEC">
+          </div>
+
+          <!-- Password Input -->
+          <div class="form-group">
+            <label for="input-password"><i class="fa-solid fa-lock"></i> Password</label>
+            <input type="password" id="input-password" placeholder="••••••••" required value="password123">
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" checked> Remember credentials
+            </label>
+            <a href="#" class="forgot-pass" onclick="alert('Please contact the Dean of Student Affairs office to reset your password.')">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            <span>Login to Portal</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+
+        <!-- Quick Demo Credentials Selector -->
+        <div class="demo-credentials">
+          <div class="demo-title"><i class="fa-solid fa-bolt"></i> Quick Demo Logins:</div>
+          <div class="demo-chips">
+            <button type="button" class="chip" onclick="quickFill('211FA04001', 'student')">
+              <i class="fa-solid fa-user"></i> Student: 211FA04001
+            </button>
+            <button type="button" class="chip chip-admin" onclick="quickFill('ADMIN01', 'admin')">
+              <i class="fa-solid fa-shield-cat"></i> Super Admin
+            </button>
+            <button type="button" class="chip chip-staff" onclick="quickFill('STAFF_IT', 'staff')">
+              <i class="fa-solid fa-wrench"></i> Staff: IT Tech (Anil)
+            </button>
+            <button type="button" class="chip chip-staff" onclick="quickFill('STAFF_ELEC', 'staff')">
+              <i class="fa-solid fa-bolt-lightning"></i> Staff: Electrician (Ramesh)
+            </button>
+            <button type="button" class="chip chip-staff" onclick="quickFill('STAFF_HOSTEL', 'staff')">
+              <i class="fa-solid fa-utensils"></i> Staff: Hostel Sup (Vikas)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: College Picture Banner (Matching Photo 2 style) -->
+      <div class="login-right">
+        <div class="college-card-overlay">
+          <span class="badge-tag">VIGNAN STUDENT VOICE & RESOLUTION CELL</span>
+          <h1 class="overlay-headline">Find the right path to be heard.</h1>
+          <p class="overlay-subtext">Official student complaint & grievance portal for Vignan's Institute of Information Technology (VIIT). Submit concerns privately to campus authorities and track live resolution.</p>
+        </div>
+        <!-- College Campus Photo Banner -->
+        <div class="college-photo-wrapper">
+          <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80" alt="Vignan University Campus Main Building" class="college-photo-img" onerror="this.onerror=null; this.parentElement.classList.add('svg-fallback');">
+          <div class="svg-campus-graphic">
+            <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+              <defs>
+                <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#3b82f6"/>
+                  <stop offset="50%" stop-color="#93c5fd"/>
+                  <stop offset="100%" stop-color="#e0f2fe"/>
+                </linearGradient>
+                <linearGradient id="lawnGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#22c55e"/>
+                  <stop offset="100%" stop-color="#15803d"/>
+                </linearGradient>
+              </defs>
+              <rect width="800" height="400" fill="url(#skyGrad)"/>
+              <rect y="400" width="800" height="200" fill="url(#lawnGrad)"/>
+              <rect x="80" y="120" width="640" height="280" fill="#F8FAFC" rx="8"/>
+              <rect x="340" y="70" width="120" height="50" fill="#E2E8F0" rx="4"/>
+              <path d="M 340 70 Q 400 30 460 70 Z" fill="#1E3B2B"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 2. MAIN APP PORTAL (STUDENT / ADMIN / WORKING STAFF) -->
+  <!-- ========================================================= -->
+  <div id="app-screen" class="screen">
+    
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <div class="nav-logo"><i class="fa-solid fa-building-columns"></i></div>
+        <div class="nav-title">
+          <h1>Vignan Student Complaint Portal</h1>
+          <span class="nav-sub">Vignan's Institute of Information Technology (VIIT Autonomous)</span>
+        </div>
+      </div>
+      
+      <div class="nav-right">
+        <!-- Admin/Staff Notifications Bell Icon -->
+        <div class="notification-bell-wrapper" onclick="toggleNotificationDropdown()">
+          <button class="btn-bell" title="Notifications & System Alerts">
+            <i class="fa-solid fa-bell"></i>
+            <span class="bell-badge" id="unread-notif-count">2</span>
+          </button>
+          
+          <!-- Dropdown Notification Inbox -->
+          <div class="notification-dropdown hidden" id="notif-dropdown">
+            <div class="dropdown-header">
+              <h4><i class="fa-solid fa-envelope-open-text"></i> System Notifications</h4>
+              <span class="mark-read-btn" onclick="markAllNotificationsRead()">Mark all as read</span>
+            </div>
+            <div class="dropdown-body" id="notification-items-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <div id="role-badge-display" class="badge badge-student">
+          <i class="fa-solid fa-user-graduate"></i> Student Portal
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Layout Grid -->
+    <div class="portal-layout">
+      
+      <!-- ========================================================= -->
+      <!-- LEFT SIDEBAR: PROFILE CARD (Top-left as requested) -->
+      <!-- ========================================================= -->
+      <aside class="portal-sidebar">
+        
+        <!-- Profile Card Component -->
+        <div class="profile-card" id="student-profile-box">
+          <div class="profile-header">
+            <div class="avatar-wrapper">
+              <img id="user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul" alt="User Avatar">
+            </div>
+            <div class="profile-title">
+              <h3 id="user-name">Rahul Sharma</h3>
+              <span id="user-rollno" class="rollno-tag">211FA04001</span>
+            </div>
+          </div>
+
+          <div class="profile-divider"></div>
+
+          <div class="profile-details">
+            <div class="detail-item">
+              <span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Department:</span>
+              <span class="detail-val" id="user-dept">Computer Science & Engg.</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fa-solid fa-calendar-days"></i> Role / Year:</span>
+              <span class="detail-val" id="user-year">3rd Year (Semester VI)</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fa-solid fa-envelope"></i> Email:</span>
+              <span class="detail-val" id="user-email">rahul.211fa04001@vignan.ac.in</span>
+            </div>
+            <div class="detail-item" id="row-user-phone">
+              <span class="detail-label"><i class="fa-solid fa-phone"></i> Mobile:</span>
+              <span class="detail-val" id="user-phone">+91 98765 43210</span>
+            </div>
+          </div>
+
+          <!-- Active Stats in Profile -->
+          <div class="profile-stats-grid">
+            <div class="stat-mini">
+              <span class="stat-num" id="user-my-complaints-count">2</span>
+              <span class="stat-lbl" id="user-my-complaints-lbl">My Complaints</span>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-num text-warning" id="user-in-progress-count">1</span>
+              <span class="stat-lbl">In Progress</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Categories Navigator -->
+        <div class="widget-card" id="categories-sidebar-widget">
+          <h4 class="widget-heading"><i class="fa-solid fa-list-check"></i> Complaint Categories</h4>
+          <div class="category-list">
+            <button class="cat-item active" onclick="filterByCategory('all', this)">
+              <span><i class="fa-solid fa-border-all"></i> All Categories</span>
+              <span class="cat-count" id="count-cat-all">6</span>
+            </button>
+            <button class="cat-item" onclick="filterByCategory('Academic', this)">
+              <span><i class="fa-solid fa-book-open"></i> Academic Support</span>
+              <span class="cat-count" id="count-cat-academic">2</span>
+            </button>
+            <button class="cat-item" onclick="filterByCategory('Infrastructure', this)">
+              <span><i class="fa-solid fa-wifi"></i> Infrastructure & IT</span>
+              <span class="cat-count" id="count-cat-infra">2</span>
+            </button>
+            <button class="cat-item" onclick="filterByCategory('Hostel & Mess', this)">
+              <span><i class="fa-solid fa-utensils"></i> Hostel & Mess</span>
+              <span class="cat-count" id="count-cat-hostel">1</span>
+            </button>
+            <button class="cat-item" onclick="filterByCategory('Finance & Fees', this)">
+              <span><i class="fa-solid fa-file-invoice-dollar"></i> Finance & Fees</span>
+              <span class="cat-count" id="count-cat-finance">1</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Helpdesk Contact Widget -->
+        <div class="widget-card widget-support">
+          <i class="fa-solid fa-headset widget-icon"></i>
+          <h4>Need Urgent Assistance?</h4>
+          <p>Contact Vignan Student Affairs Helpline directly for urgent safety or facility outages.</p>
+          <a href="tel:18004252585" class="btn btn-light btn-block btn-sm"><i class="fa-solid fa-phone"></i> Call Helpline 1800-425-2585</a>
+        </div>
+
+      </aside>
+
+
+      <!-- ========================================================= -->
+      <!-- RIGHT SIDE: MAIN PORTAL DASHBOARD (STUDENT / ADMIN / STAFF) -->
+      <!-- ========================================================= -->
+      <main class="portal-main">
+        
+        <!-- DASHBOARD STATS & WELCOME -->
+        <section class="dashboard-banner">
+          <div class="dash-welcome-flex">
+            <div>
+              <h2 id="dash-greeting">Welcome back, Rahul! 👋</h2>
+              <p id="dash-subtitle">Track your filed grievances, monitor live resolution progress, or register a new campus concern.</p>
+            </div>
+
+            <!-- Date Range Filter for Dashboard Metrics (Section A) -->
+            <div class="date-filter-box" id="admin-date-filter-box">
+              <label><i class="fa-solid fa-calendar-week"></i> Filter Metrics:</label>
+              <select id="date-range-select" onchange="handleDateRangeChange()">
+                <option value="all" selected>All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stats-overview-grid">
+            <div class="stat-card">
+              <div class="stat-icon bg-green-light"><i class="fa-solid fa-folder-open"></i></div>
+              <div class="stat-data">
+                <span class="stat-value" id="stat-total">6</span>
+                <span class="stat-label">Total Complaints</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-yellow-light"><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <div class="stat-data">
+                <span class="stat-value text-amber" id="stat-progress">3</span>
+                <span class="stat-label">In-Progress</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-blue-light"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="stat-data">
+                <span class="stat-value text-emerald" id="stat-resolved">2</span>
+                <span class="stat-label">Resolved</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-red-light"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div class="stat-data">
+                <span class="stat-value text-rose" id="stat-urgent">1</span>
+                <span class="stat-label">SLA Overdue (< 20 Days)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ========================================================= -->
+        <!-- SECTION A: ADMIN GRAPHICAL REPORTS & ANALYTICAL CHARTS -->
+        <!-- ========================================================= -->
+        <section class="admin-charts-section hidden" id="admin-analytics-container">
+          <div class="section-header-flex">
+            <div>
+              <h3><i class="fa-solid fa-chart-pie text-forest"></i> Grievance Analytics & Category Reports</h3>
+              <p class="section-sub">Visual breakdown of student complaints by category and status distribution for institutional reporting.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="exportComplaintsToCSV()">
+              <i class="fa-solid fa-file-csv"></i> Export Ticket Log (CSV)
+            </button>
+          </div>
+
+          <div class="charts-grid-2">
+            <!-- Canvas Bar Chart: Complaints by Category -->
+            <div class="chart-card">
+              <h4><i class="fa-solid fa-chart-column text-forest"></i> Complaints by Category</h4>
+              <div class="canvas-wrapper">
+                <canvas id="chart-category-bar" width="400" height="220"></canvas>
+              </div>
+            </div>
+
+            <!-- Canvas Pie/Donut Chart: Status Distribution -->
+            <div class="chart-card">
+              <h4><i class="fa-solid fa-chart-pie text-amber"></i> Resolution Status Distribution</h4>
+              <div class="canvas-wrapper">
+                <canvas id="chart-status-pie" width="400" height="220"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- DASHBOARD LIVE COMPLAINT PROGRESS TRACKER SECTION -->
+        <section class="dashboard-progress-section" id="dash-progress-container">
+          <div class="section-header-flex">
+            <div>
+              <h3><i class="fa-solid fa-bars-progress text-forest"></i> Live Complaint Progress Tracker</h3>
+              <p class="section-sub">Real-time status breakdown and step-by-step progress of filed campus grievances.</p>
+            </div>
+            <span class="badge badge-private"><i class="fa-solid fa-rotate text-emerald"></i> UGC 20-Day SLA Monitored</span>
+          </div>
+
+          <div id="dash-progress-cards-list" class="progress-cards-grid">
+            <!-- Dynamically populated via JavaScript -->
+          </div>
+        </section>
+
+
+        <!-- CONTROLS & ACTION HEADER -->
+        <section class="feed-controls-bar">
+          <div class="view-tabs">
+            <button class="view-tab active" id="tab-my-complaints" onclick="switchView('my')">
+              <i class="fa-solid fa-user"></i> My Filed Complaints (<span id="my-count">2</span>)
+            </button>
+            <button class="view-tab" id="tab-all-complaints" onclick="switchView('all')">
+              <i class="fa-solid fa-users"></i> All Student Complaints (<span id="all-count">6</span>)
+            </button>
+            <button class="view-tab hidden" id="tab-staff-assigned" onclick="switchView('staff')">
+              <i class="fa-solid fa-clipboard-check"></i> Assigned Work Orders (<span id="staff-assigned-count">0</span>)
+            </button>
+          </div>
+
+          <!-- "+ ADD NEW COMPLAINT" PROMINENT BUTTON -->
+          <div class="action-buttons">
+            <button class="btn btn-outline btn-sm hidden" id="btn-export-csv" onclick="exportComplaintsToCSV()">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+            <button class="btn btn-primary btn-add-complaint" id="btn-open-add-complaint" onclick="openAddComplaintModal()">
+              <i class="fa-solid fa-plus-circle"></i> File New Complaint
+            </button>
+          </div>
+        </section>
+
+
+        <!-- SEARCH & FILTER TOOLBAR -->
+        <div class="filter-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="Search complaints by Ticket ID, title, roll number, or keywords..." onkeyup="handleSearch()">
+          </div>
+
+          <div class="filter-dropdowns">
+            <select id="filter-status" onchange="applyFilters()">
+              <option value="all">All Statuses</option>
+              <option value="Received">Received</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Under Investigation">Under Investigation</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+
+            <select id="filter-priority" onchange="applyFilters()">
+              <option value="all">All Priorities</option>
+              <option value="High">High Priority</option>
+              <option value="Medium">Medium Priority</option>
+              <option value="Low">Low Priority</option>
+            </select>
+          </div>
+        </div>
+
+
+        <!-- COMPLAINTS LIST FEED -->
+        <section class="complaints-feed-container" id="complaints-list">
+          <!-- Dynamically populated via JavaScript -->
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 3. MODAL: ADD NEW COMPLAINT FORM -->
+  <!-- ========================================================= -->
+  <div id="modal-add-complaint" class="modal-backdrop hidden">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <div>
+          <h3><i class="fa-solid fa-circle-plus"></i> File a Vignan Student Complaint</h3>
+          <p>Your complaint will be logged securely under Roll No: <strong id="modal-rollno-display">211FA04001</strong></p>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-add-complaint')">&times;</button>
+      </div>
+
+      <form id="form-add-complaint" onsubmit="submitNewComplaint(event)">
+        <div class="modal-body">
+          
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="complaint-category"><i class="fa-solid fa-layer-group"></i> Complaint Category *</label>
+              <select id="complaint-category" required onchange="checkCategoryDuplicatePrompt()">
+                <option value="" disabled selected>Select category...</option>
+                <option value="Academic">Academic (Lectures, Faculty, Attendance)</option>
+                <option value="Infrastructure">Infrastructure (Wi-Fi, Labs, Classrooms, Projectors)</option>
+                <option value="Hostel & Mess">Hostel & Mess (Food quality, Water, Sanitation)</option>
+                <option value="Exam Cell">Exam & Valuation (Hall tickets, Marks, Transcripts)</option>
+                <option value="Finance & Fees">Finance & Fee Counter</option>
+                <option value="Harassment & Disciplinary">Harassment & Disciplinary (SGRC)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="complaint-priority"><i class="fa-solid fa-flag"></i> Priority Level *</label>
+              <select id="complaint-priority" required>
+                <option value="Low">Low (General suggestion/queries)</option>
+                <option value="Medium" selected>Medium (Standard grievance)</option>
+                <option value="High">High (Urgent facility outage or safety issue)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="complaint-title"><i class="fa-solid fa-heading"></i> Complaint Subject / Title *</label>
+            <input type="text" id="complaint-title" placeholder="e.g. Wi-Fi non-functional in Block-B 2nd Floor Labs" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="complaint-location"><i class="fa-solid fa-location-dot"></i> Specific Campus Location *</label>
+              <input type="text" id="complaint-location" placeholder="e.g. CSE Lab 4, Block-B" required>
+            </div>
+
+            <div class="form-group">
+              <label for="complaint-subcat"><i class="fa-solid fa-tag"></i> Specific Issue Type</label>
+              <input type="text" id="complaint-subcat" placeholder="e.g. Network Disconnects / Low Speed">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="complaint-desc"><i class="fa-solid fa-align-left"></i> Detailed Complaint Description *</label>
+            <textarea id="complaint-desc" rows="4" placeholder="Describe the issue clearly, mentioning date, time, and impact..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="complaint-attachment-url"><i class="fa-solid fa-paperclip"></i> Upload Evidence Photo / Document URL (Optional)</label>
+            <input type="url" id="complaint-attachment-url" placeholder="https://example.com/photo.jpg">
+          </div>
+
+          <div class="form-group-checkbox">
+            <label>
+              <input type="checkbox" id="check-anonymous"> Submit as Anonymous Complaint (Identity hidden from public feed)
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-add-complaint')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Complaint</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 4. MODAL: DUPLICATE COMPLAINT POPUP -->
+  <!-- ========================================================= -->
+  <div id="modal-duplicate-warning" class="modal-backdrop hidden">
+    <div class="modal-box modal-md modal-alert">
+      
+      <div class="alert-icon-header">
+        <div class="alert-circle-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+      </div>
+
+      <div class="alert-body text-center">
+        <h2 class="alert-title">Complaint Already Filed!</h2>
+        <p class="alert-desc">
+          A similar complaint regarding this category and issue has already been reported by another student in your campus area.
+        </p>
+        
+        <div class="existing-complaint-summary" id="duplicate-summary-box">
+          <div class="summary-badge"><i class="fa-solid fa-circle-info"></i> Existing Complaint Record:</div>
+          <h4 id="dup-title">Wi-Fi network down in CSE Block-B 2nd Floor</h4>
+          <div class="summary-meta">
+            <span><i class="fa-solid fa-id-card"></i> Filed by: 21A91A0502</span>
+            <span><i class="fa-solid fa-clock"></i> Status: <strong class="text-amber">In Progress</strong></span>
+          </div>
+        </div>
+
+        <p class="prompt-instruction-text">What would you like to do?</p>
+
+        <!-- TWO OPTIONS FROM PROMPT -->
+        <div class="duplicate-options-grid">
+          
+          <button type="button" class="opt-card opt-progress" onclick="handleDuplicateOption('progress')">
+            <div class="opt-icon bg-forest"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="opt-content">
+              <h3>1) Complaint Progress</h3>
+              <p>View live resolution stage, assigned officer updates & estimated timeline.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+          </button>
+
+          <button type="button" class="opt-card opt-action" onclick="handleDuplicateOption('action')">
+            <div class="opt-icon bg-gold"><i class="fa-solid fa-bolt-lightning"></i></div>
+            <div class="opt-content">
+              <h3>2) Important Action</h3>
+              <p>Escalate urgency, co-sign to boost priority (+1 Upvote), or add evidence.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+          </button>
+
+        </div>
+      </div>
+
+      <div class="modal-footer justify-center">
+        <button type="button" class="btn btn-link" onclick="closeModal('modal-duplicate-warning')">
+          Dismiss & Proceed with New Submission anyway
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 5. MODAL: COMPLAINT PROGRESS, PRIVATE NOTES & MESSAGING -->
+  <!-- ========================================================= -->
+  <div id="modal-progress-tracker" class="modal-backdrop hidden">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <div>
+          <span class="badge badge-category" id="tracker-category">Infrastructure & IT</span>
+          <h3 id="tracker-title">Wi-Fi network down in CSE Block-B 2nd Floor</h3>
+          <span class="tracker-id">Ticket ID: <strong id="tracker-id-text">CMP-2026-094</strong> | <span id="tracker-sla-badge" class="sla-badge sla-green">SLA: 17 Days Left</span></span>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-progress-tracker')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- 5-Stage Stepper Bar -->
+        <div class="progress-stepper-container">
+          <div class="stepper-wrapper">
+            <div class="step-item step-completed" id="step-1">
+              <div class="step-circle"><i class="fa-solid fa-paper-plane"></i></div>
+              <span class="step-label">1. Received</span>
+            </div>
+            <div class="step-line active"></div>
+            
+            <div class="step-item step-completed" id="step-2">
+              <div class="step-circle"><i class="fa-solid fa-user-check"></i></div>
+              <span class="step-label">2. Assigned</span>
+            </div>
+            <div class="step-line active"></div>
+            
+            <div class="step-item step-active" id="step-3">
+              <div class="step-circle"><i class="fa-solid fa-magnifying-glass font-bold"></i></div>
+              <span class="step-label">3. Under Investigation</span>
+            </div>
+            <div class="step-line"></div>
+            
+            <div class="step-item" id="step-4">
+              <div class="step-circle"><i class="fa-solid fa-wrench"></i></div>
+              <span class="step-label">4. In Progress</span>
+            </div>
+            <div class="step-line"></div>
+
+            <div class="step-item" id="step-5">
+              <div class="step-circle"><i class="fa-solid fa-circle-check"></i></div>
+              <span class="step-label">5. Resolved</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Uploaded Attachment Photo -->
+        <div id="tracker-attachment-box" class="attachment-preview-card hidden">
+          <h5><i class="fa-solid fa-paperclip"></i> Student Uploaded Evidence Photo</h5>
+          <img id="tracker-student-img" src="" alt="Student Evidence Proof">
+        </div>
+
+        <!-- Staff Resolution Proof Image (When Resolved) -->
+        <div id="tracker-resolution-proof-box" class="resolution-proof-card hidden">
+          <h5><i class="fa-solid fa-certificate text-emerald"></i> Working Staff Resolution Proof Document</h5>
+          <img id="tracker-resolution-img" src="" alt="Staff Work Resolution Proof">
+        </div>
+
+        <!-- Section C: Internal Notes (Private to Admin/Staff) -->
+        <div class="internal-notes-box" id="internal-notes-wrapper">
+          <div class="notes-header">
+            <h4><i class="fa-solid fa-lock text-amber"></i> Internal Notes (Private - Staff & Admin Only)</h4>
+            <span class="badge badge-private">Hidden from Student</span>
+          </div>
+
+          <div class="notes-list" id="internal-notes-list">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div class="add-note-flex">
+            <input type="text" id="input-internal-note" placeholder="Add private internal staff note (e.g. Technician dispatched at 2 PM)...">
+            <button class="btn btn-secondary btn-sm" onclick="addInternalNote()"><i class="fa-solid fa-plus"></i> Add Note</button>
+          </div>
+        </div>
+
+        <!-- Section C: Student & Admin Public Messaging Chat -->
+        <div class="public-chat-box">
+          <h4><i class="fa-solid fa-comments text-forest"></i> Communication & Student Response Thread</h4>
+          <div class="chat-thread" id="public-chat-list">
+            <!-- Dynamically populated -->
+          </div>
+          
+          <div class="chat-input-flex">
+            <input type="text" id="input-public-chat" placeholder="Type message to student or staff...">
+            <button class="btn btn-primary btn-sm" onclick="sendPublicChatMessage()"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="upvoteComplaintFromModal()"><i class="fa-solid fa-thumbs-up"></i> Upvote Issue (<span id="tracker-upvotes">14</span>)</button>
+        <button class="btn btn-primary" onclick="closeModal('modal-progress-tracker')">Close Tracker</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 6. MODAL: WORKING STAFF TASK RESOLUTION DRAWER -->
+  <!-- ========================================================= -->
+  <div id="modal-staff-resolution" class="modal-backdrop hidden">
+    <div class="modal-box modal-md">
+      <div class="modal-header bg-forest text-white">
+        <div>
+          <h3><i class="fa-solid fa-screwdriver-wrench"></i> Working Staff Task Completion</h3>
+          <p class="text-mint">Ticket ID: <strong id="staff-target-id">CMP-2026-094</strong></p>
+        </div>
+        <button class="btn-close text-white" onclick="closeModal('modal-staff-resolution')">&times;</button>
+      </div>
+
+      <form id="form-staff-resolution" onsubmit="submitStaffResolution(event)">
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <label><i class="fa-solid fa-sliders"></i> Update Task Status *</label>
+            <select id="staff-status-select" class="form-control" required>
+              <option value="Under Investigation">Under Investigation</option>
+              <option value="In Progress">In Progress (Work Underway)</option>
+              <option value="Resolved" selected>Resolved & Work Completed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-camera"></i> Resolution Proof Image / Photo URL *</label>
+            <input type="url" id="staff-proof-url" class="form-control" placeholder="https://images.unsplash.com/photo-1517694712202-14dd9538aa97" required value="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80">
+            <span class="input-hint">Upload photo of repaired equipment, replacement RO filter, or completed work</span>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-comment-dots"></i> Work Completion Summary & Notes *</label>
+            <textarea id="staff-remarks-text" rows="4" placeholder="Describe the repair work completed, parts replaced, and final testing results..." required>Replaced damaged cable port & calibrated optical receiver. Tested network speed at 500 Mbps.</textarea>
+          </div>
+
+          <div class="dual-notify-alert">
+            <i class="fa-solid fa-paper-plane text-emerald"></i>
+            <span><strong>Dual Automated Notification:</strong> Upon clicking resolve, an automated completion alert message will be sent to <strong>BOTH the Student AND the Admin/HOD</strong>.</span>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-staff-resolution')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-circle-check"></i> Complete & Notify Student + Admin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================= -->
+  <!-- 7. MODAL: ADMIN TICKET ASSIGNMENT & STATUS DRAWER -->
+  <!-- ========================================================= -->
+  <div id="modal-admin-action" class="modal-backdrop hidden">
+    <div class="modal-box modal-md">
+      <div class="modal-header bg-forest text-white">
+        <div>
+          <h3><i class="fa-solid fa-user-gear"></i> Admin Complaint Assignment & Control</h3>
+          <p class="text-mint">Updating Ticket ID: <strong id="admin-target-id">CMP-2026-091</strong></p>
+        </div>
+        <button class="btn-close text-white" onclick="closeModal('modal-admin-action')">&times;</button>
+      </div>
+
+      <form id="form-admin-update" onsubmit="saveAdminStatusUpdate(event)">
+        <div class="modal-body">
+          
+          <!-- AI SMART WORKER SUGGESTION BOX (NEW FEATURE) -->
+          <div class="ai-suggestion-card" id="ai-suggestion-box">
+            <div class="ai-suggestion-header">
+              <span class="badge-ai"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Smart Assistant</span>
+              <span class="ai-confidence-tag" id="ai-confidence-score">98% Match Confidence</span>
+            </div>
+            <div class="ai-suggestion-content">
+              <div class="ai-recommended-worker">
+                <i class="fa-solid fa-robot ai-robot-icon"></i>
+                <div>
+                  <span class="ai-lbl">Recommended Assignee:</span>
+                  <h4 id="ai-worker-name">Anil Kumar (IT Specialist)</h4>
+                  <p id="ai-reason-text">"Analyzed category 'Infrastructure' and keywords 'Wi-Fi / Network'. Current Workload: 2 Active Tasks."</p>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm btn-apply-ai" onclick="applyAISuggestion()">
+                <i class="fa-solid fa-bolt text-amber"></i> ✨ Apply AI Suggestion
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group mt-3">
+            <label><i class="fa-solid fa-sliders"></i> Update Resolution Stage</label>
+            <select id="admin-status-select" class="form-control" required>
+              <option value="Received">Received (Pending Review)</option>
+              <option value="Assigned" selected>Assigned (Accepted by Admin)</option>
+              <option value="Under Investigation">Under Investigation</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved & Closed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-user-check"></i> Route & Assign to Concerned Working Staff Member *</label>
+            <select id="admin-staff-select" class="form-control" required>
+              <option value="STAFF_IT">Anil Kumar (IT Specialist - Network/Hardware)</option>
+              <option value="STAFF_ELEC">Ramesh Babu (Campus Electrician - Maintenance)</option>
+              <option value="STAFF_HOSTEL">Vikas Singh (Hostel Supervisor - Mess/RO)</option>
+              <option value="HOD_IT">Dr. K. V. Raman (IT HOD)</option>
+              <option value="HOD_HOSTEL">Prof. M. Suresh (Chief Warden)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-comment-dots"></i> Official Response / Action Remarks (Visible to Student)</label>
+            <textarea id="admin-remarks-text" rows="4" placeholder="Enter official progress update or resolution details..." required></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-admin-action')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update Assignment & Notify</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
